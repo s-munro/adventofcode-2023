@@ -2,18 +2,58 @@ def main(data_list):
     data_sum = 0
 
     for line in data_list:
-        p1, p2 = None, None
-        for idx, char in enumerate(line):
-            p2_idx = -(idx+1)
-            if p1 is None and char.isdigit():
-                p1 = char
-            if p2 is None and line[p2_idx].isdigit():
-                p2 = line[p2_idx]
-            if p1 and p2:
-                data_sum += int(p1 + p2)
-                break
+        d1, d2 = find_digits(line)
+        data_sum += int(d1 + d2)
     print(data_sum)
-    return data_sum
+
+def find_digits(row):
+    digit_one, digit_two = None, None
+
+    for idx, char in enumerate(row):
+        if char.isdigit():
+            if not digit_one:
+                digit_one = char
+            digit_two = char
+        
+        temp_str = char
+        is_literal = True
+        difference = 1
+
+        while is_literal:
+            if (idx + difference) > (len(row) - 1):
+                break
+
+            p2 = row[idx+difference]
+            temp_str += p2
+
+            if temp_str in values_dict:
+                if not digit_one:
+                    digit_one = values_dict[temp_str]
+                digit_two = values_dict[temp_str]
+
+            if row[idx+difference].isdigit():
+                is_literal = False
+            
+            difference += 1
+
+            if difference > 5:
+                is_literal = False
+
+    return digit_one, digit_two
+
+
+values_dict = {
+    "one": "1",
+    "two": "2",
+    "three": "3",
+    "four": "4",
+    "five": "5",
+    "six": "6",
+    "seven": "7",
+    "eight": "8",
+    "nine": "9"
+}
+
 
 data = [
 "2qlljdqcbeight",
